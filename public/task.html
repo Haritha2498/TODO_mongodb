@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-200">
+    <nav class="flex justify-end gap-1 items-center pt-3">
+        <a href="/">
+            <button class="bg-blue-600 text-white border-none rounded-md py-2 px-3 cursor-pointer">Home</button>
+        </a>
+        <a href="/tasks">
+            <button class="bg-sky-400 text-white border-none rounded-md py-2 px-3 cursor-pointer">View Tasks</button>
+        </a>
+    </nav>
+    <div class="w-[50%] bg-white mt-5 mx-auto rounded-lg p-6">
+        <div class="text-xl font-semibold mb-4">Update Task</div>
+        <form method="POST" id="updateTaskForm">
+            <div class="mb-4">
+                <label for="title" class="block mb-1">Title</label>
+                <input type="text" name="title" id="title" class="w-full border border-gray-300 rounded py-2 px-3" required />
+            </div>
+            <div class="mb-4">
+                <label for="description" class="block mb-1">Description</label>
+                <textarea name="description" id="description" class="w-full border border-gray-300 rounded py-2 px-3" required></textarea>
+            </div>
+            <button type="submit" class="bg-sky-400 text-white py-2 px-4 rounded">Update Task</button>
+        </form>
+    </div>
+    <script>
+        async function loadTask() {
+            const id = window.location.pathname.split('/').pop();
+            try {
+                const response = await fetch(`/api/task/${id}`);
+                const task = await response.json();
+                document.getElementById('title').value = task.title;
+                document.getElementById('description').value = task.description;
+                document.getElementById('updateTaskForm').action = `/updatetask/${id}`;
+            } catch (error) {
+                console.error('Error loading task:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadTask);
+    </script>
+</body>
+</html>
